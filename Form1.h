@@ -64,6 +64,8 @@ namespace TimeLapser {
 
 	private: bool mostrar;
 	private: System::String^ Version;
+
+	private: int WebcamIndex; // TODO: Reconsiderar el eliminar esta variable y utilizar solo appsettings
 	private: System::Windows::Forms::Button^  bCrearVideo;
 	private: System::Windows::Forms::TextBox^  textBoxDestino;
 
@@ -80,6 +82,11 @@ namespace TimeLapser {
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  ayudaToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  acercaDeTimeLapserToolStripMenuItem;
+	private: System::Windows::Forms::Button^  buttonSelectWebcamUp;
+	private: System::Windows::Forms::Button^  buttonSelectWebcamDown;
+	private: System::Windows::Forms::Label^  labelSelectWebcam;
+	private: System::Windows::Forms::Label^  labelWebcamIndex;
+
 
 
 
@@ -109,7 +116,11 @@ namespace TimeLapser {
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->buttonExaminarDestino = (gcnew System::Windows::Forms::Button());
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->buttonSelectWebcamUp = (gcnew System::Windows::Forms::Button());
+			this->buttonSelectWebcamDown = (gcnew System::Windows::Forms::Button());
 			this->buttonAplicar = (gcnew System::Windows::Forms::Button());
+			this->labelWebcamIndex = (gcnew System::Windows::Forms::Label());
+			this->labelSelectWebcam = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->textBoxVideoFilename = (gcnew System::Windows::Forms::TextBox());
@@ -125,7 +136,7 @@ namespace TimeLapser {
 			// trackBar1
 			// 
 			this->trackBar1->Cursor = System::Windows::Forms::Cursors::SizeWE;
-			this->trackBar1->Location = System::Drawing::Point(12, 231);
+			this->trackBar1->Location = System::Drawing::Point(11, 270);
 			this->trackBar1->Maximum = 120;
 			this->trackBar1->Minimum = 1;
 			this->trackBar1->Name = L"trackBar1";
@@ -137,7 +148,7 @@ namespace TimeLapser {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(13, 212);
+			this->label1->Location = System::Drawing::Point(12, 251);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(122, 13);
 			this->label1->TabIndex = 1;
@@ -146,15 +157,15 @@ namespace TimeLapser {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(145, 212);
+			this->label2->Location = System::Drawing::Point(144, 251);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(13, 13);
+			this->label2->Size = System::Drawing::Size(21, 13);
 			this->label2->TabIndex = 2;
 			this->label2->Text = L"1 s";
 			// 
 			// bEmpezar
 			// 
-			this->bEmpezar->Location = System::Drawing::Point(12, 284);
+			this->bEmpezar->Location = System::Drawing::Point(11, 323);
 			this->bEmpezar->Name = L"bEmpezar";
 			this->bEmpezar->Size = System::Drawing::Size(75, 23);
 			this->bEmpezar->TabIndex = 3;
@@ -165,7 +176,7 @@ namespace TimeLapser {
 			// bDetener
 			// 
 			this->bDetener->Enabled = false;
-			this->bDetener->Location = System::Drawing::Point(108, 284);
+			this->bDetener->Location = System::Drawing::Point(107, 323);
 			this->bDetener->Name = L"bDetener";
 			this->bDetener->Size = System::Drawing::Size(75, 23);
 			this->bDetener->TabIndex = 4;
@@ -175,7 +186,7 @@ namespace TimeLapser {
 			// 
 			// bCrearVideo
 			// 
-			this->bCrearVideo->Location = System::Drawing::Point(292, 282);
+			this->bCrearVideo->Location = System::Drawing::Point(291, 321);
 			this->bCrearVideo->Name = L"bCrearVideo";
 			this->bCrearVideo->Size = System::Drawing::Size(75, 23);
 			this->bCrearVideo->TabIndex = 5;
@@ -212,7 +223,11 @@ namespace TimeLapser {
 			// 
 			// groupBox1
 			// 
+			this->groupBox1->Controls->Add(this->buttonSelectWebcamUp);
+			this->groupBox1->Controls->Add(this->buttonSelectWebcamDown);
 			this->groupBox1->Controls->Add(this->buttonAplicar);
+			this->groupBox1->Controls->Add(this->labelWebcamIndex);
+			this->groupBox1->Controls->Add(this->labelSelectWebcam);
 			this->groupBox1->Controls->Add(this->label5);
 			this->groupBox1->Controls->Add(this->label4);
 			this->groupBox1->Controls->Add(this->label3);
@@ -222,21 +237,59 @@ namespace TimeLapser {
 			this->groupBox1->Controls->Add(this->textBoxDestino);
 			this->groupBox1->Location = System::Drawing::Point(12, 32);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(394, 165);
+			this->groupBox1->Size = System::Drawing::Size(394, 201);
 			this->groupBox1->TabIndex = 9;
 			this->groupBox1->TabStop = false;
-			this->groupBox1->Text = L"Rutas";
+			this->groupBox1->Text = L" Configuarión ";
+			// 
+			// buttonSelectWebcamUp
+			// 
+			this->buttonSelectWebcamUp->Location = System::Drawing::Point(211, 127);
+			this->buttonSelectWebcamUp->Name = L"buttonSelectWebcamUp";
+			this->buttonSelectWebcamUp->Size = System::Drawing::Size(26, 23);
+			this->buttonSelectWebcamUp->TabIndex = 10;
+			this->buttonSelectWebcamUp->Text = L">";
+			this->buttonSelectWebcamUp->UseVisualStyleBackColor = true;
+			this->buttonSelectWebcamUp->Click += gcnew System::EventHandler(this, &Form1::buttonSelectWebcamUp_Click);
+			// 
+			// buttonSelectWebcamDown
+			// 
+			this->buttonSelectWebcamDown->Location = System::Drawing::Point(158, 127);
+			this->buttonSelectWebcamDown->Name = L"buttonSelectWebcamDown";
+			this->buttonSelectWebcamDown->Size = System::Drawing::Size(26, 23);
+			this->buttonSelectWebcamDown->TabIndex = 10;
+			this->buttonSelectWebcamDown->Text = L"<";
+			this->buttonSelectWebcamDown->UseVisualStyleBackColor = true;
+			this->buttonSelectWebcamDown->Click += gcnew System::EventHandler(this, &Form1::buttonSelectWebcamDown_Click);
 			// 
 			// buttonAplicar
 			// 
 			this->buttonAplicar->Enabled = false;
-			this->buttonAplicar->Location = System::Drawing::Point(280, 128);
+			this->buttonAplicar->Location = System::Drawing::Point(280, 155);
 			this->buttonAplicar->Name = L"buttonAplicar";
 			this->buttonAplicar->Size = System::Drawing::Size(75, 23);
 			this->buttonAplicar->TabIndex = 9;
 			this->buttonAplicar->Text = L"&Aplicar";
 			this->buttonAplicar->UseVisualStyleBackColor = true;
 			this->buttonAplicar->Click += gcnew System::EventHandler(this, &Form1::buttonAplicar_Click);
+			// 
+			// labelWebcamIndex
+			// 
+			this->labelWebcamIndex->AutoSize = true;
+			this->labelWebcamIndex->Location = System::Drawing::Point(190, 132);
+			this->labelWebcamIndex->Name = L"labelWebcamIndex";
+			this->labelWebcamIndex->Size = System::Drawing::Size(0, 13);
+			this->labelWebcamIndex->TabIndex = 7;
+			this->labelWebcamIndex->TextChanged += gcnew System::EventHandler(this, &Form1::textBox_TextChanged);
+			// 
+			// labelSelectWebcam
+			// 
+			this->labelSelectWebcam->AutoSize = true;
+			this->labelSelectWebcam->Location = System::Drawing::Point(6, 132);
+			this->labelSelectWebcam->Name = L"labelSelectWebcam";
+			this->labelSelectWebcam->Size = System::Drawing::Size(113, 13);
+			this->labelSelectWebcam->TabIndex = 7;
+			this->labelSelectWebcam->Text = L"Seleccionar WebCam:";
 			// 
 			// label5
 			// 
@@ -300,7 +353,7 @@ namespace TimeLapser {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(414, 319);
+			this->ClientSize = System::Drawing::Size(414, 358);
 			this->Controls->Add(this->groupBox1);
 			this->Controls->Add(this->bCrearVideo);
 			this->Controls->Add(this->bDetener);
@@ -342,6 +395,34 @@ bool To_string( String^ source, std::string &target ){
     return result;
 }
 
+std::vector<int> getWebcams (){
+	cv::VideoCapture *cam;
+	cv::Mat frame;
+	std::vector<int> result;
+	int i = 0;
+	while (1 == 1){
+		cam = new cv::VideoCapture();
+		cam->open(i);
+		//(*cam) >> frame;
+		if (!cam->isOpened())
+			break;
+		result.push_back(i);
+		//Windows::Forms::MessageBox::Show("[i]: " + i.ToString());
+		//cam->release(); // No es necesario
+		//delete(cam);
+		i++;
+	}
+	// ###################### DEBUG
+	String^ resultado;
+	for (i = 0; i < result.size(); i++)
+		resultado += result[i].ToString() + "; ";
+	Windows::Forms::MessageBox::Show("[Webcams]: " + resultado);
+	// ###################### DEBUG
+
+
+	return result;
+}
+
 
 	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
 				 this->label2->Text = System::Convert::ToString(this->trackBar1->Value) + " s";
@@ -353,7 +434,10 @@ bool To_string( String^ source, std::string &target ){
 				 this->textBoxDestino->Text = ConfigurationSettings::AppSettings["outputDir"]->ToString();
 				 this->textBoxFileName->Text = ConfigurationSettings::AppSettings["imageFileName"]->ToString();
 				 this->textBoxVideoFilename->Text = ConfigurationSettings::AppSettings["videoFileName"]->ToString();
+				 this->WebcamIndex = Convert::ToInt16(ConfigurationSettings::AppSettings["webcamIndex"]);
+				 this->labelWebcamIndex->Text = this->WebcamIndex.ToString();
 				 this->buttonAplicar->Enabled = false;
+				 //getWebcams ();
 			 }
 
 private: System::Void bEmpezar_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -369,9 +453,16 @@ private: System::Void bEmpezar_Click(System::Object^  sender, System::EventArgs^
 				 this->bEmpezar->Enabled = false;
 				 this->bCrearVideo->Enabled = false;
 				 this->bDetener->Enabled = true;
+
+				 this->buttonExaminarDestino->Enabled = false;
+				 this->buttonSelectWebcamDown->Enabled = false;
+				 this->buttonSelectWebcamUp->Enabled = false;
+				 this->textBoxDestino->Enabled = false;
+				 this->textBoxFileName->Enabled = false;
+
 				 this->mostrar = true;
 				 try{
-					this->webcam->open(0); // Activar webcam
+					this->webcam->open(Convert::ToInt16(ConfigurationSettings::AppSettings["webcamIndex"])); // Activar webcam
 					start = clock();
 				 } catch (Exception^ e) {
 					Windows::Forms::MessageBox::Show("["+WhoCalledMe()+"]: " + e->Message->ToString());
@@ -382,8 +473,10 @@ private: System::Void bEmpezar_Click(System::Object^  sender, System::EventArgs^
 						 break; // Sino se obtuvo ningun dato, detenemos el bucle
 					 finish = clock(); // Obtenemos la hora, para calcular tiempo entre captura y captura
 					 duration = (double)(finish - start) / CLOCKS_PER_SEC; // Diferencia entre start y finish
+					 //duration = (double)(finish - start) / CLOCKS_PER_SEC * 100; // Diferencia entre start y finish en centesimas de segundo
 					 cv::imshow("Live", frame); // Mostramos la imagen en la ventana "Live"
 					 if (duration >= this->trackBar1->Value){ // Si ha pasado el tiempo especificado, capturamos
+					 //if (duration >= (0.01)){ // DEBUG !!! (4 frames por segundo)
 						 ruta += System::Convert::ToString(i);
 						 ruta += ".jpg";
 						 To_string(ruta, aux); // Para guardar la imagen capturada tenemos que convertir "ruta" en std::string
@@ -392,8 +485,15 @@ private: System::Void bEmpezar_Click(System::Object^  sender, System::EventArgs^
 						 ruta = rutabase; // Reseteamos el valor de "ruta"
 						 start = clock(); // Reiniciamos la cuenta de tiempo
 					 }
-					 cv::waitKey(1);
+					 cv::waitKey(10); // Con un valor alto el programa se muetra "mas ligero" cuando esta en este bucle
 				 }
+
+				 this->textBoxDestino->Enabled = true;
+				 this->textBoxFileName->Enabled = true;
+
+				 this->buttonExaminarDestino->Enabled = true;
+				 this->buttonSelectWebcamDown->Enabled = true;
+				 this->buttonSelectWebcamUp->Enabled = true;
 				 this->bEmpezar->Enabled = true;
 				 this->bCrearVideo->Enabled = true;
 				 this->bDetener->Enabled = false;
@@ -469,10 +569,12 @@ private: System::Void buttonAplicar_Click(System::Object^  sender, System::Event
 				aps->Settings["outputDir"]->Value =  Destino;
 				aps->Settings["imageFileName"]->Value = this->textBoxFileName->Text;
 				aps->Settings["videoFileName"]->Value = this->textBoxVideoFilename->Text;
+				aps->Settings["webcamIndex"]->Value = this->WebcamIndex.ToString();
 				// Cambios en el fichero de configuracion
 				ConfigurationSettings::AppSettings["outputDir"] = Destino;
 				ConfigurationSettings::AppSettings["imageFileName"] = this->textBoxFileName->Text;
 				ConfigurationSettings::AppSettings["videoFileName"] = this->textBoxVideoFilename->Text;
+				ConfigurationSettings::AppSettings["webcamIndex"] = this->WebcamIndex.ToString();
 				// Persistir los cambios
 				aps->SectionInformation->ForceSave = true;
 				config->Save(ConfigurationSaveMode::Full);
@@ -483,10 +585,22 @@ private: System::Void buttonAplicar_Click(System::Object^  sender, System::Event
 		 }
 
 /* textBox_TextChanged
- * Se encarga de habilitar buttonAplicar cuando se cambia el contenido de cualquier textBox del formulario
+ * Se encarga de habilitar buttonAplicar cuando se cambia el contenido de cualquier textBox o label del formulario
  */
 private: System::Void textBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 this->buttonAplicar->Enabled = true;
+		 }
+private: System::Void buttonSelectWebcamDown_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if (this->WebcamIndex > 0){
+				this->WebcamIndex--;
+				this->labelWebcamIndex->Text = this->WebcamIndex.ToString();
+			 }
+		 }
+private: System::Void buttonSelectWebcamUp_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if (this->WebcamIndex < 99){
+				this->WebcamIndex++;
+				this->labelWebcamIndex->Text = this->WebcamIndex.ToString();
+			 }
 		 }
 };
 }
